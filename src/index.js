@@ -4,9 +4,20 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-ReactDOM.render(
+import {createStore} from 'redux';
+import {Provider} from 'react-redux';
+
+const store = createStore((state =[], action) => {
+  if (action.type==="ADD")
+  return [...state, action.item];
+  return state;
+});
+
+ReactDOM.render (
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
