@@ -1,38 +1,110 @@
-.App {
-  text-align: center;
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body {
+    margin: 0;
+    padding: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.container {
+    background: #f1f3f4;
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    padding: 1rem 2rem;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.text-area {
+    overflow: hidden;
 }
 
-.App-link {
-  color: #61dafb;
+.title input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 1.5rem;
+    padding: 0.3em;
+    color: gray;
+    background: #f1f3f4;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.date p {
+    margin: 0;
+    padding: 0.3em;
+    font-size: 1rem;
+}
+
+.note {
+    height: 100%;
+}
+
+.note textarea {
+    background: #f1f3f4;
+    padding-top: 5px;
+    height: 90%;
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 1.2rem;
+}
+
+.options {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(80px, 120px));
+    grid-template-rows: 100px;
+    /* grid-gap: 1rem; */
+    margin-top: 1rem;
+    padding: 0.7rem 0;
+}
+
+.option {
+    width: 100%;
+    height: 100%;
+}
+
+.color {
+    width: 100%;
+    height: 100%;
+    background-image: url(./images/color.png);
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    border-right: 1px solid gray;
+}
+
+.background {
+    width: 100%;
+    height: 100%;
+    background-image: url(./images/background.png);
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    border-right: 1px solid gray;
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    background-image: url(./images/image.png);
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    border-right: 1px solid gray;
+}
+
+.fontSize {
+    width: 100%;
+    height: 100%;
+    background-image: url(./images/text.png);
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    cursor: pointer;
 }
