@@ -1,39 +1,12 @@
 import React from "react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { nanoid } from "nanoid";
+import NoteList from "./components/NoteList";
 import Note from "./components/Note";
 import "./App.css";
 
 export default function App() {
-  const date = new Date();
-  const noteItems = [
-    {
-      id: nanoid(),
-      title: "React js",
-      note: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatum sunt, possimus minus eligendi est explicabo exercitationem a nulla eos. Delectus?",
-      style: {
-        color: "black",
-        background: "#f1f3f4",
-        fontSize: "20",
-        image: "none",
-      },
-      date: date.toLocaleDateString(),
-    },
-    {
-      id: nanoid(),
-      title: "React js",
-      note: "noet 2Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatum sunt, possimus minus eligendi est explicabo exercitationem a nulla eos. Delectus?",
-      style: {
-        color: "black",
-        background: "#f1f3f4",
-        fontSize: "20",
-        image: "none",
-      },
-      date: date.toLocaleDateString(),
-    },
-  ];
-
-  const [notes, setNotes] = useState(noteItems);
+  const [notes, setNotes] = useState([]);
   const optionRef1 = useRef();
   const optionRef2 = useRef();
   const optionRef3 = useRef();
@@ -42,6 +15,22 @@ export default function App() {
 
   const options = [optionRef1, optionRef2, optionRef3, optionRef4];
 
+  const STORAGE_KEY = "REACT_NOTE_APP";
+
+  useEffect(() => {
+    const jsonData = localStorage.getItem(STORAGE_KEY);
+    console.log(jsonData);
+    setNotes(JSON.parse(jsonData));
+  }, []);
+
+  useEffect(() => {
+    const jsonData = JSON.stringify(notes);
+    localStorage.setItem(STORAGE_KEY, jsonData);
+  }, [notes]);
+
+  const date = new Date();
+
+  // page change
   function handleShow(event) {
     options.map((option) => option.current.classList.remove("show"));
     const selectedItem = event.target.closest(".option");
@@ -61,31 +50,53 @@ export default function App() {
       ? name.classList.remove("show")
       : name.classList.add("show");
   }
+
+  //adding note
+  function handleSaveNote({ title, note }) {
+    //add note
+    const preNote = notes;
+    const newNote = {
+      id: nanoid(),
+      title,
+      note,
+      style: {
+        color: "#1a1a1a",
+        background: "#f1f3f4",
+        fontSize: "20",
+        image: "none",
+      },
+      date: date.toLocaleDateString(),
+    };
+    setNotes([newNote, ...preNote]);
+  }
+
+  //deleting note
+  function handleDeleteNote(id) {
+    const preNote = notes;
+    setNotes(preNote.filter((note) => note.id !== id));
+  }
+
   return (
     <div className="wrapper" ref={wrapperRef}>
       <div className="noteLists">
         <div className="plus" onClick={handlePageChange}>
           &#43;
         </div>
-        {noteItems.map((note) => {
-          return <Note key={note.id} note={note} />;
+        {notes.map((note) => {
+          return (
+            <NoteList
+              key={note.id}
+              note={note}
+              handleDeleteNote={handleDeleteNote}
+            />
+          );
         })}
       </div>
       <div className="container">
-        <div className="text-area">
-          <p className="back" onClick={handlePageChange}>
-            &#8592;
-          </p>
-          <div className="title">
-            <input type="text" placeholder="Title" />
-          </div>
-          <div className="date">
-            <p>222222</p>
-          </div>
-          <div className="note">
-            <textarea></textarea>
-          </div>
-        </div>
+        <Note
+          handlePageChange={handlePageChange}
+          handleSaveNote={handleSaveNote}
+        />
         <div className="options">
           <div className="option" ref={optionRef1}>
             <div className="color" onClick={handleShow}></div>
