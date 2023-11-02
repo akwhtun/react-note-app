@@ -1,16 +1,20 @@
 import React from "react";
 import { useRef } from "react";
-export default function Note({ handlePageChange, handleSaveNote }) {
-  const date = new Date();
+
+export default function Note({ handleAddPageChange, handleSaveNote }) {
   const titleRef = useRef();
   const noteRef = useRef();
+  const date = new Date();
+
   function handleNoteText() {
-    handlePageChange();
+    handleAddPageChange("addNoteForm");
     const title =
       titleRef.current.value === "" ? "Untitle" : titleRef.current.value;
     const note =
       noteRef.current.value === "" ? "Add your note..." : noteRef.current.value;
     handleSaveNote({ note, title });
+    titleRef.current.value = "";
+    noteRef.current.value = "";
   }
   return (
     <div className="text-area">

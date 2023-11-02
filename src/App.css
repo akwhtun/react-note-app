@@ -9,7 +9,15 @@ body {
     padding: 0;
 }
 
+.wrapper {
+    width: 97vw;
+    height: 97vh;
+    margin: auto;
+}
+
 .wrapper.show .container {
+    width: 100%;
+    height: 100%;
     position: absolute;
     top: 0;
     left: 0;
@@ -19,9 +27,12 @@ body {
 
 .wrapper.show .noteLists {
     opacity: 0;
+    display: none;
 }
 
 .wrapper .noteLists {
+    width: 100%;
+    height: 100%;
     position: absolute;
     top: 0;
     left: 0;
@@ -36,8 +47,6 @@ body {
     opacity: 0;
     z-index: -1;
     background: #f1f3f4;
-    width: 100vw;
-    height: 100vh;
     display: grid;
     grid-template-rows: 1fr auto;
     padding: 0rem 2rem;
@@ -129,7 +138,7 @@ body {
 
 .items {
     width: 90vw;
-    max-width: 90vwx;
+    max-width: 90vw;
     min-width: 300px;
     overflow: scroll;
     display: flex;
@@ -138,12 +147,13 @@ body {
     position: absolute;
     left: 3rem;
     transition: max-height 300ms linear, transform 300ms linear;
+    margin-right: 10px;
 }
 
 .cross {
     position: absolute;
     right: 5px;
-    top: 5px;
+    bottom: 60px;
     display: inline-block;
     width: 30px;
     height: 30px;
@@ -190,13 +200,10 @@ body {
     grid-gap: 1rem;
     padding: 1rem 2rem;
     position: relative;
-    width: 100vw;
-    height: 100vh;
-    background: #c7c8c9;
 }
 
 .plus {
-    position: absolute;
+    position: fixed;
     right: 40px;
     bottom: 50px;
     width: 60px;
@@ -208,13 +215,18 @@ body {
     cursor: pointer;
     font-size: 2.8rem;
     font-weight: bold;
+    z-index: 10;
 }
 
 .list {
-    background: snow;
     border-radius: 10px;
     padding: 0.5em 1em;
+    transition: box-shadow 200ms cubic-bezier(0.075, 0.82, 0.165, 1), transform 250ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
 
+.list:hover {
+    box-shadow: 3px 3px 5px #c6c6c6;
+    transform: translateY(-3px);
 }
 
 .noteTitle {
@@ -228,6 +240,7 @@ body {
     height: 3em;
     margin: 0;
     padding: 0;
+    line-height: 1.1em;
     margin-top: 8px;
     padding: 5px;
     font-size: 1.2rem;
@@ -237,9 +250,9 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 10px;
     margin: 0;
     padding: 0;
+    margin-top: 5px;
 }
 
 .trash {

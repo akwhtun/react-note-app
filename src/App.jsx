@@ -3,10 +3,14 @@ import { useState, useRef, useEffect } from "react";
 import { nanoid } from "nanoid";
 import NoteList from "./components/NoteList";
 import Note from "./components/Note";
+import ReadNote from "./components/ReadNote";
 import "./App.css";
 
 export default function App() {
   const [notes, setNotes] = useState([]);
+  const [formSwitch, setFormSwitch] = useState("addNoteForm");
+  const [selectedNote, setSelectedNote] = useState();
+
   const optionRef1 = useRef();
   const optionRef2 = useRef();
   const optionRef3 = useRef();
@@ -19,7 +23,6 @@ export default function App() {
 
   useEffect(() => {
     const jsonData = localStorage.getItem(STORAGE_KEY);
-    console.log(jsonData);
     setNotes(JSON.parse(jsonData));
   }, []);
 
@@ -44,11 +47,43 @@ export default function App() {
     removeItem.classList.remove("show");
   }
 
-  function handlePageChange() {
+  function handleAddPageChange(form) {
+    setFormSwitch(form);
     const name = wrapperRef.current;
     name.className.includes("show")
       ? name.classList.remove("show")
       : name.classList.add("show");
+  }
+
+  function handleReadPageChange(form, id) {
+    setFormSwitch(form);
+    const noteData = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    const getSelectedNote = noteData.find((note) => note.id === id);
+    console.log(id, getSelectedNote);
+    // console.log(getSelectedNote);
+    setSelectedNote(getSelectedNote);
+    const name = wrapperRef.current;
+    name.className.includes("show")
+      ? name.classList.remove("show")
+      : name.classList.add("show");
+  }
+
+  function handleUpdateChange(form, id, title, note) {
+    handleAddPageChange(form);
+    // const allNote = [...notes];
+    // const updateNote = notes.find((note) => note.id === id);
+    // updateNote.title = title;
+    // updateNote.note = note;
+    // setNotes(allNote);
+    setNotes((prenotes) => {
+      return prenotes.map((prenote) => {
+        if (prenote.id !== id) {
+          return prenote;
+        } else {
+          return { ...prenote, title, note };
+        }
+      });
+    });
   }
 
   //adding note
@@ -79,7 +114,10 @@ export default function App() {
   return (
     <div className="wrapper" ref={wrapperRef}>
       <div className="noteLists">
-        <div className="plus" onClick={handlePageChange}>
+        <div
+          className="plus"
+          onClick={() => handleAddPageChange("addNoteForm")}
+        >
           &#43;
         </div>
         {notes.map((note) => {
@@ -88,15 +126,23 @@ export default function App() {
               key={note.id}
               note={note}
               handleDeleteNote={handleDeleteNote}
+              handleReadPageChange={handleReadPageChange}
             />
           );
         })}
       </div>
       <div className="container">
-        <Note
-          handlePageChange={handlePageChange}
-          handleSaveNote={handleSaveNote}
-        />
+        {formSwitch === "addNoteForm" ? (
+          <Note
+            handleAddPageChange={handleAddPageChange}
+            handleSaveNote={handleSaveNote}
+          />
+        ) : (
+          <ReadNote
+            handleUpdateChange={handleUpdateChange}
+            selectedNote={selectedNote}
+          />
+        )}
         <div className="options">
           <div className="option" ref={optionRef1}>
             <div className="color" onClick={handleShow}></div>
