@@ -7,6 +7,7 @@
 body {
     margin: 0;
     padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .wrapper {
@@ -51,6 +52,7 @@ body {
     grid-template-rows: 1fr auto;
     padding: 0rem 2rem;
     padding-bottom: 1rem;
+    position: relative;
 }
 
 .back {
@@ -92,6 +94,7 @@ body {
     outline: none;
     font-size: 20px;
     text-indent: 0.3em;
+    z-index: 1;
 }
 
 .options {
@@ -151,25 +154,40 @@ body {
 }
 
 .cross {
+    display: none;
     position: absolute;
-    right: 5px;
-    bottom: 60px;
-    display: inline-block;
+    top: 63%;
+    right: 6.5%;
     width: 30px;
     height: 30px;
-    text-align: center;
     line-height: 30px;
+    text-align: center;
     background: gray;
     border-radius: 50%;
     font-size: 2rem;
     font-weight: bold;
     cursor: pointer;
+
 }
 
-.items p {
+.cross.show {
+    display: inline-block;
+}
+
+.items input {
+    display: inline-block;
     flex-shrink: 0;
     width: 100px;
     height: 80px;
+    border: none;
+    outline: none;
+    text-align: center;
+    font-style: italic;
+    font-weight: bold;
+}
+
+.items input.active {
+    border: 3px solid black;
 }
 
 .option.show .items {
@@ -177,20 +195,36 @@ body {
     transform: translateY(-250px);
 }
 
-.black {
-    background: #1a1a1a;
+.purple {
+    background: #890189;
 }
 
 .white {
-    background: #e3e3e3;
-}
-
-.violet {
-    background: #9400d3;
+    background: #dcdcdc;
 }
 
 .pink {
-    background: #f80d8b;
+    background: #ff1493;
+}
+
+.blue {
+    background: #0470dd;
+}
+
+.black {
+    background: #2d2b55;
+}
+
+.lime {
+    background: #3a913a;
+}
+
+.orange {
+    background: #c14112;
+}
+
+.yellow {
+    background: #b8b327;
 }
 
 .noteLists {
@@ -259,6 +293,7 @@ body {
     font-size: 2.3rem;
     margin: 0;
     padding: 0;
+    margin: 0 50px;
     cursor: pointer;
 }
 

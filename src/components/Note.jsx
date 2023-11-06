@@ -1,34 +1,59 @@
 import React from "react";
 import { useRef } from "react";
 
-export default function Note({ handleAddPageChange, handleSaveNote }) {
+export default function Note({
+  handleAddPageChange,
+  handleSaveNote,
+  defaultStyle,
+}) {
   const titleRef = useRef();
   const noteRef = useRef();
   const date = new Date();
 
+  function nothingTodo() {
+    //
+  }
+
+  function colorStyle() {
+    return {
+      backgroundColor: defaultStyle.background,
+      color: defaultStyle.color,
+    };
+  }
   function handleNoteText() {
     handleAddPageChange("addNoteForm");
-    const title =
-      titleRef.current.value === "" ? "Untitle" : titleRef.current.value;
-    const note =
-      noteRef.current.value === "" ? "Add your note..." : noteRef.current.value;
-    handleSaveNote({ note, title });
+    const title = titleRef.current.value;
+    const note = noteRef.current.value;
+    const color = defaultStyle.color;
+    const background = defaultStyle.background;
+    title === "" && note === ""
+      ? nothingTodo()
+      : handleSaveNote({ note, title, color, background });
     titleRef.current.value = "";
     noteRef.current.value = "";
   }
   return (
-    <div className="text-area">
+    <div className="text-area" style={colorStyle()}>
       <p className="back" onClick={handleNoteText}>
         &#8592;
       </p>
       <div className="title">
-        <input type="text" placeholder="Title" ref={titleRef} />
+        <input
+          type="text"
+          placeholder="Title"
+          ref={titleRef}
+          style={colorStyle()}
+        />
       </div>
       <div className="date">
         <p>{date.toLocaleDateString()}</p>
       </div>
       <div className="note">
-        <textarea placeholder="Write your note..." ref={noteRef}></textarea>
+        <textarea
+          placeholder="Write your note..."
+          ref={noteRef}
+          style={colorStyle()}
+        ></textarea>
       </div>
     </div>
   );

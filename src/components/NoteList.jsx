@@ -5,32 +5,19 @@ export default function NoteList({
   handleDeleteNote,
   handleReadPageChange,
 }) {
-  function getTextStyle() {
-    const color = note.style.color;
-    const fontSize = note.style.fontSize;
-    return {
-      color: color,
-      fontSize: fontSize,
-    };
+  function colorStyle() {
+    return { background: note.style.background, color: note.style.color };
   }
-  function getBackgroundStyle() {
-    const background = note.style.background;
-    // const image = note.style.image;
-    return {
-      background: background,
-      // backgroundimage: URL(image),
-    };
-  }
-
   return (
-    <div style={getBackgroundStyle()} className="list">
-      <div onClick={() => handleReadPageChange("readNoteForm", note.id)}>
+    <div style={colorStyle()} className="list">
+      <div
+        onClick={() => handleReadPageChange("readNoteForm", note.id)}
+        style={colorStyle()}
+      >
         <p className="noteTitle">{note.title}</p>
-        <p className="noteText" style={getTextStyle()}>
-          {note.note.substring(0, 400)}...
-        </p>
+        <p className="noteText">{note.note.substring(0, 400)}...</p>
       </div>
-      <div className="noteFooter">
+      <div className="noteFooter" style={colorStyle()}>
         <p className="noteDate">{note.date}</p>
         <p className="trash" onClick={() => handleDeleteNote(note.id)}>
           &#x1F5D1;

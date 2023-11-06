@@ -6,15 +6,22 @@ export default function Note({ selectedNote, handleUpdateChange }) {
   const [note, setNote] = useState();
 
   useMemo(() => {
-    setTitle(selectedNote.title);
-    setNote(selectedNote.note);
+    setTitle(selectedNote && selectedNote.title);
+    setNote(selectedNote && selectedNote.note);
   }, [selectedNote]);
 
   function handleChange() {
     handleUpdateChange("readNoteForm", selectedNote.id, title, note);
   }
+
+  function colorStyle() {
+    return {
+      backgroundColor: selectedNote && selectedNote.style.background,
+      color: selectedNote && selectedNote.style.color,
+    };
+  }
   return (
-    <div className="text-area">
+    <div className="text-area" style={colorStyle()}>
       <p className="back" onClick={handleChange}>
         &#8592;
       </p>
@@ -24,16 +31,18 @@ export default function Note({ selectedNote, handleUpdateChange }) {
           placeholder="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          style={colorStyle()}
         />
       </div>
       <div className="date">
-        <p>{selectedNote.date}</p>
+        <p>{selectedNote && selectedNote.date}</p>
       </div>
       <div className="note">
         <textarea
           placeholder="Write your note..."
           value={note}
           onChange={(e) => setNote(e.target.value)}
+          style={colorStyle()}
         ></textarea>
       </div>
     </div>
