@@ -1,15 +1,38 @@
 import React from "react";
 
-export default function FontSizeOption({ handleShow, optionRef3 }) {
+export default function FontSizeOption({
+  fontSize,
+  selectedNote,
+  defaultStyle,
+  formSwitch,
+  handleNoteFontSizeChange,
+}) {
+  let fontActive = "";
+  function readNoteFontSize() {
+    const activeFontSize = selectedNote && selectedNote.style.fontSize;
+    fontActive = activeFontSize;
+  }
+
+  function addNoteFontSize() {
+    const activeFontSize = defaultStyle && defaultStyle.fontSize;
+    fontActive = activeFontSize;
+  }
+  formSwitch === "readNoteForm" ? readNoteFontSize() : addNoteFontSize();
   return (
-    <div className="option" ref={optionRef3}>
-      <div className="image" onClick={handleShow}></div>
-      <div className="items">
-        <p className="black"></p>
-        <p className="white"></p>
-        <p className="pink"></p>
-        <p className="violet"></p>
-      </div>
+    <div className="font">
+      <input
+        type="range"
+        min={fontSize.min}
+        max={fontSize.max}
+        value={fontActive}
+        onChange={(e) =>
+          handleNoteFontSizeChange(
+            selectedNote && selectedNote.id,
+            e.target.value
+          )
+        }
+      />
+      <span>{fontActive} px</span>
     </div>
   );
 }

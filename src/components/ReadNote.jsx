@@ -20,6 +20,15 @@ export default function Note({ selectedNote, handleUpdateChange }) {
       color: selectedNote && selectedNote.style.color,
     };
   }
+
+  function colorFontStyle() {
+    return {
+      backgroundColor: selectedNote && selectedNote.style.background,
+      color: selectedNote && selectedNote.style.color,
+      fontSize: selectedNote && selectedNote.style.fontSize + "px",
+    };
+  }
+
   return (
     <div className="text-area" style={colorStyle()}>
       <p className="back" onClick={handleChange}>
@@ -42,7 +51,7 @@ export default function Note({ selectedNote, handleUpdateChange }) {
           placeholder="Write your note..."
           value={note}
           onChange={(e) => setNote(e.target.value)}
-          style={colorStyle()}
+          style={colorFontStyle()}
         ></textarea>
       </div>
     </div>

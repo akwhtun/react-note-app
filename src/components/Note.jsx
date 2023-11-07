@@ -20,15 +20,23 @@ export default function Note({
       color: defaultStyle.color,
     };
   }
+  function colorFontStyle() {
+    return {
+      backgroundColor: defaultStyle.background,
+      color: defaultStyle.color,
+      fontSize: defaultStyle.fontSize + "px",
+    };
+  }
   function handleNoteText() {
     handleAddPageChange("addNoteForm");
     const title = titleRef.current.value;
     const note = noteRef.current.value;
     const color = defaultStyle.color;
     const background = defaultStyle.background;
-    title === "" && note === ""
-      ? nothingTodo()
-      : handleSaveNote({ note, title, color, background });
+    const fontSize = defaultStyle.fontSize;
+    title.trim().length > 0 && note.trim().length > 0
+      ? handleSaveNote({ note, title, color, background, fontSize })
+      : nothingTodo();
     titleRef.current.value = "";
     noteRef.current.value = "";
   }
@@ -52,7 +60,7 @@ export default function Note({
         <textarea
           placeholder="Write your note..."
           ref={noteRef}
-          style={colorStyle()}
+          style={colorFontStyle()}
         ></textarea>
       </div>
     </div>

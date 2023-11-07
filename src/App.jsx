@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useRef, useEffect, useMemo } from "react";
 import { nanoid } from "nanoid";
+import Search from "./components/Search";
 import NoteList from "./components/NoteList";
 import Note from "./components/Note";
 import ReadNote from "./components/ReadNote";
@@ -43,22 +44,22 @@ export default function App() {
     {
       id: 0,
       name: "black",
-      value: "#2d2b55",
+      value: "#1e1d1e",
     },
     {
       id: 1,
-      name: "lime",
-      value: "#3a913a",
+      name: "bluedark",
+      value: "#2d2b55",
     },
     {
       id: 2,
-      name: "orange",
-      value: "#c14112",
+      name: "demon",
+      value: "#9400d3",
     },
     {
       id: 3,
-      name: "yellow",
-      value: "#b8b327",
+      name: "lime",
+      value: "#01cf50",
     },
     {
       id: 4,
@@ -67,10 +68,16 @@ export default function App() {
     },
   ];
 
+  const fontSizeOption = {
+    min: 10,
+    max: 30,
+    value: 20,
+  };
+
   const defaultOption = {
     color: "#1a1a1a",
     background: "#f1f3f4",
-    fontSize: "20px",
+    fontSize: "20",
     backgroundImage: "none",
   };
 
@@ -81,8 +88,11 @@ export default function App() {
     return notes.find((note) => note.id === selectedNoteId);
   }, [selectedNoteId, notes]);
 
+  const [searchText, setSearchText] = useState("");
+
   const [color, setColor] = useState(colorOption);
   const [background, setBackground] = useState(backgroundOption);
+  const [fontSize, setFontSize] = useState(fontSizeOption);
 
   const [defaultStyle, setDefaultStyle] = useState(defaultOption);
 
@@ -156,7 +166,7 @@ export default function App() {
   }
 
   //add note
-  function handleSaveNote({ title, note, color, background }) {
+  function handleSaveNote({ title, note, color, background, fontSize }) {
     const preNote = notes;
     const newNote = {
       id: nanoid(),
@@ -165,14 +175,13 @@ export default function App() {
       style: {
         color,
         background,
-        fontSize: "20",
+        fontSize,
         image: "none",
       },
       date: date.toLocaleDateString(),
     };
     setNotes([newNote, ...preNote]);
   }
-
   //delete note
   function handleDeleteNote(id) {
     const preNote = notes;
@@ -185,8 +194,13 @@ export default function App() {
       ? {
           backgroundColor: selectedNote && selectedNote.style.background,
           color: selectedNote && selectedNote.style.color,
+          fontSize: selectedNote && selectedNote.style.fontSize + "px",
         }
-      : { backgroundColor: defaultStyle.background, color: defaultStyle.color };
+      : {
+          backgroundColor: defaultStyle.background,
+          color: defaultStyle.color,
+          fontSize: defaultStyle.fontSize + "px",
+        };
   }
   //color change
   function addNoteColorChange(color) {
@@ -236,25 +250,55 @@ export default function App() {
       : readNoteBackgroundChange(noteId, backgroundId, backgroundValue);
   }
 
+  //fontSize change
+  function addNoteFontSizeChange(size) {
+    const style = { ...defaultStyle };
+    style.fontSize = size;
+    setDefaultStyle(style);
+  }
+  function readNoteFontSizeChane(noteId, size) {
+    const font = { ...fontSize };
+    font.value = size;
+    setFontSize(font);
+    const preNotes = [...notes];
+    const getNote = preNotes.find((preNote) => preNote.id === noteId);
+    getNote.style.fontSize = size;
+    setNotes(preNotes);
+  }
+  function handleNoteFontSizeChange(noteId, size) {
+    formSwitch === "addNoteForm"
+      ? addNoteFontSizeChange(size)
+      : readNoteFontSizeChane(noteId, size);
+  }
+
+  //search
+  function handleSearchNote(text) {
+    setSearchText(text);
+  }
   return (
     <div className="wrapper" ref={wrapperRef}>
       <div className="noteLists">
+        <Search handleSearchNote={handleSearchNote} />
         <div
           className="plus"
           onClick={() => handleAddPageChange("addNoteForm")}
         >
           &#43;
         </div>
-        {notes.map((note) => {
-          return (
-            <NoteList
-              key={note.id}
-              note={note}
-              handleDeleteNote={handleDeleteNote}
-              handleReadPageChange={handleReadPageChange}
-            />
-          );
-        })}
+        {notes
+          .filter((noteText) =>
+            noteText.note.toLowerCase().includes(searchText)
+          )
+          .map((note) => {
+            return (
+              <NoteList
+                key={note.id}
+                note={note}
+                handleDeleteNote={handleDeleteNote}
+                handleReadPageChange={handleReadPageChange}
+              />
+            );
+          })}
       </div>
       <div className="container" style={containerStyle()}>
         {formSwitch === "addNoteForm" ? (
@@ -301,7 +345,18 @@ export default function App() {
             </div>
           </div>
 
-          <FontSizeOption handleShow={handleShow} optionRef3={optionRef3} />
+          <div className="option" ref={optionRef3}>
+            <div className="fontSize" onClick={handleShow}></div>
+            <div className="items">
+              <FontSizeOption
+                fontSize={fontSize}
+                selectedNote={selectedNote}
+                defaultStyle={defaultStyle}
+                handleNoteFontSizeChange={handleNoteFontSizeChange}
+                formSwitch={formSwitch}
+              />
+            </div>
+          </div>
           <BackgroundImageOption
             handleShow={handleShow}
             optionRef4={optionRef4}
