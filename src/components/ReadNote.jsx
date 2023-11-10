@@ -1,7 +1,11 @@
 import React from "react";
 import { useState, useMemo } from "react";
 
-export default function Note({ selectedNote, handleUpdateChange }) {
+export default function Note({
+  selectedNote,
+  handleUpdateChange,
+  readNoteDefault,
+}) {
   const [title, setTitle] = useState();
   const [note, setNote] = useState();
 
@@ -10,8 +14,14 @@ export default function Note({ selectedNote, handleUpdateChange }) {
     setNote(selectedNote && selectedNote.note);
   }, [selectedNote]);
 
+  function nothingTodo() {
+    //
+  }
+
   function handleChange() {
-    handleUpdateChange("readNoteForm", selectedNote.id, title, note);
+    title.trim().length > 0 || note.trim().length > 0
+      ? handleUpdateChange("readNoteForm", selectedNote.id, title, note)
+      : nothingTodo();
   }
 
   function colorStyle() {
@@ -31,9 +41,21 @@ export default function Note({ selectedNote, handleUpdateChange }) {
 
   return (
     <div className="text-area" style={colorStyle()}>
-      <p className="back" onClick={handleChange}>
-        &#8592;
-      </p>
+      <div className="pre">
+        <p className="back" onClick={handleChange}>
+          &#8592;
+        </p>
+        <p
+          className="restore"
+          style={{
+            fontSize: "18px",
+            border: `1px solid ${selectedNote && selectedNote.style.color}`,
+          }}
+          onClick={() => readNoteDefault(selectedNote.id)}
+        >
+          Restore Default Theme
+        </p>
+      </div>
       <div className="title">
         <input
           type="text"

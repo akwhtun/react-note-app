@@ -4,6 +4,28 @@
     box-sizing: border-box;
 }
 
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #e1e3e4;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-track:hover {
+    background-color: snow;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #e1e3e4;
+}
+
+::-webkit-scrollbar-corner {
+    background-color: #e1e3e4;
+}
+
 body {
     margin: 0;
     padding: 0;
@@ -12,9 +34,9 @@ body {
 
 .wrapper {
     width: 97vw;
-    height: 97vh;
-    margin: auto;
+    height: 100vh;
 }
+
 
 .wrapper.show .container {
     width: 100%;
@@ -49,17 +71,34 @@ body {
     background: #f1f3f4;
     display: grid;
     grid-template-rows: 1fr auto;
-    padding: 0rem 2rem;
-    padding-bottom: 1rem;
     position: relative;
+
+}
+
+.pre {
+    display: flex;
+    align-items: center;
+    column-gap: 1rem;
+    margin: 0;
+    padding: 0;
+    margin-top: 3px;
+}
+
+.restore {
+    padding: 5px 10px;
+    border-radius: 9999px;
+    margin: 0;
+    margin-left: 100px;
+    cursor: pointer;
+    margin-top: 5px;
 }
 
 .back {
     font-size: 2.3rem;
     font-weight: bold;
+    cursor: pointer;
     margin: 0;
     padding: 0;
-    cursor: pointer;
 }
 
 .title input {
@@ -70,7 +109,6 @@ body {
     padding: 0;
     font-size: 28px;
     padding: 0.3em;
-    color: gray;
     background: #f1f3f4;
 }
 
@@ -81,6 +119,11 @@ body {
 }
 
 .note {
+    height: 92.5%;
+}
+
+.text-area {
+    padding: 0 2rem;
     height: 100%;
 }
 
@@ -100,8 +143,8 @@ body {
     display: grid;
     grid-template-columns: repeat(4, minmax(80px, 120px));
     grid-template-rows: 100px;
-    margin-top: 1rem;
     padding: 0.7rem 0;
+    height: 100%;
 }
 
 .option {
@@ -144,19 +187,20 @@ body {
     min-width: 300px;
     overflow: scroll;
     display: flex;
+    align-items: center;
     gap: 1rem;
     max-height: 0;
     position: absolute;
-    left: 3rem;
-    transition: max-height 300ms linear, transform 300ms linear;
+    left: 2rem;
     margin-right: 10px;
+    transition: max-height 300ms linear, transform 300ms linear;
 }
 
 .cross {
     display: none;
     position: absolute;
-    top: 63%;
-    right: 6.5%;
+    top: 71%;
+    right: 40%;
     width: 30px;
     height: 30px;
     line-height: 30px;
@@ -173,7 +217,8 @@ body {
     display: inline-block;
 }
 
-.items input {
+.items input,
+.items p {
     display: inline-block;
     flex-shrink: 0;
     width: 100px;
@@ -185,28 +230,30 @@ body {
     font-weight: bold;
 }
 
-.items .font {
-    width: 100%;
+.font {
+    width: 64%;
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    background: #e1e3e4;
 }
 
 .font input {
-    width: 40%;
+    width: 80%;
 }
 
 .font span {
     margin-left: 10px;
 }
 
-.items input.active {
+.items input.active,
+.items p.active {
     border: 3px solid black;
 }
 
 .option.show .items {
-    max-height: 300px;
-    transform: translateY(-250px);
+    max-height: 200px;
+    transform: translateY(-200px);
 }
 
 .purple {
@@ -241,21 +288,50 @@ body {
     background: #01cf50;
 }
 
+.items p {
+    width: 120px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+
+.photo1 {
+    background-image: url(./covers/back1.jpg);
+}
+
+.photo2 {
+    background-image: url(./covers/back2.jpg);
+}
+
+.photo3 {
+    background-image: url(./covers/back3.jpg);
+}
+
+.photo4 {
+    background-image: url(./covers/back4.jpg);
+}
+
+.photo5 {
+    background-image: url(./covers/back5.jpg);
+}
+
+.photo6 {
+    background-image: url(./covers/back6.jpg);
+}
+
 .noteLists {
     margin-top: 45px;
     transition: position 200ms linear;
     display: grid;
-    grid-auto-rows: 170px;
+    grid-auto-rows: 190px;
     grid-gap: 1rem;
     padding: 1rem 2rem;
     position: relative;
 }
 
 .search {
-    position: fixed;
-    z-index: 1000;
-    top: 13px;
-    width: 94%;
+    width: 95%;
     display: flex;
     align-items: center;
     font-size: 20px;
@@ -263,6 +339,11 @@ body {
     padding: 2px 6px;
     border-radius: 9999px;
     overflow: hidden;
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
 }
 
 .search input {
@@ -270,13 +351,19 @@ body {
     padding: 5px;
     font-size: 20px;
     background-color: #e1e3e4;
+    color: black;
     border: none;
     outline: none;
 }
 
-.search span {
-    display: inline-block;
-    padding: 0 4px;
+.search-img {
+    width: 35px;
+    height: 35px;
+    background-image: url("./images/search.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
 }
 
 .plus {
@@ -285,7 +372,6 @@ body {
     bottom: 50px;
     width: 60px;
     height: 60px;
-    background: gray;
     border-radius: 50%;
     text-align: center;
     line-height: 60px;
@@ -293,9 +379,12 @@ body {
     font-size: 2.8rem;
     font-weight: bold;
     z-index: 10;
+    color: black;
+    background: #e1e3e4;
 }
 
 .list {
+
     border-radius: 10px;
     padding: 0.5em 1em;
     transition: box-shadow 200ms cubic-bezier(0.075, 0.82, 0.165, 1), transform 250ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -316,13 +405,12 @@ body {
 }
 
 .noteText {
-    height: 3em;
     margin: 0;
     padding: 0;
     line-height: 1.1em;
-    margin-top: 8px;
+    margin-top: 3px;
     padding: 5px;
-    height: 60px;
+    height: 74px;
     overflow: hidden;
 }
 
@@ -332,14 +420,28 @@ body {
     align-items: center;
     margin: 0;
     padding: 0;
-    margin-top: 5px;
+    margin-top: 3px;
+}
+
+.tra-def {
+    display: flex;
+    align-items: center;
+    margin-right: 70px;
+}
+
+.def {
+    margin: 0;
+    padding: 0;
+    padding: 5px 10px;
+    margin-top: 3px;
+    cursor: pointer;
+    margin-right: 15px;
 }
 
 .trash {
     font-size: 2.3rem;
     margin: 0;
     padding: 0;
-    margin: 0 50px;
     cursor: pointer;
 }
 
@@ -347,4 +449,38 @@ body {
     font-size: 1rem;
     margin: 0;
     padding: 0;
+}
+
+/* responsive */
+@media (max-width:1065px) {
+    .cross {
+        right: 20%;
+    }
+
+    .font {
+        width: 86%;
+    }
+
+    .search {
+        width: 91%;
+    }
+
+}
+
+@media (max-width:790px) {
+    .cross {
+        right: 4%;
+    }
+
+    .font {
+        width: 100%;
+    }
+
+    .font input {
+        width: 85%;
+    }
+
+    .search {
+        width: 88%;
+    }
 }

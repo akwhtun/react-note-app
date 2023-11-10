@@ -74,11 +74,44 @@ export default function App() {
     value: 20,
   };
 
+  const backgroundImageOption = [
+    {
+      id: "0",
+      name: "photo1",
+      value: "back1.jgp",
+    },
+    {
+      id: "1",
+      name: "photo2",
+      value: "back2.jgp",
+    },
+    {
+      id: "2",
+      name: "photo3",
+      value: "back3.jgp",
+    },
+    {
+      id: "3",
+      name: "photo4",
+      value: "back4.jgp",
+    },
+    {
+      id: "4",
+      name: "photo5",
+      value: "back5.jgp",
+    },
+    {
+      id: "5",
+      name: "photo6",
+      value: "back6.jgp",
+    },
+  ];
+
   const defaultOption = {
     color: "#1a1a1a",
     background: "#f1f3f4",
     fontSize: "20",
-    backgroundImage: "none",
+    image: "none",
   };
 
   const [notes, setNotes] = useState([]);
@@ -88,13 +121,14 @@ export default function App() {
     return notes.find((note) => note.id === selectedNoteId);
   }, [selectedNoteId, notes]);
 
-  const [searchText, setSearchText] = useState("");
-
   const [color, setColor] = useState(colorOption);
   const [background, setBackground] = useState(backgroundOption);
   const [fontSize, setFontSize] = useState(fontSizeOption);
+  const [backgroundImage, setBackgroundImage] = useState(backgroundImageOption);
 
   const [defaultStyle, setDefaultStyle] = useState(defaultOption);
+
+  const [searchText, setSearchText] = useState("");
 
   const optionRef1 = useRef();
   const optionRef2 = useRef();
@@ -271,9 +305,49 @@ export default function App() {
       : readNoteFontSizeChane(noteId, size);
   }
 
+  //backgroundImage Change
+  function addNoteBackgroundImageChange(value) {
+    const style = { ...defaultStyle };
+    style.image = value;
+    setDefaultStyle(style);
+  }
+
+  function readNoteBackgroundImageChange(noteId, imageId, value) {
+    setBackgroundImage((preImage) =>
+      preImage.map((image) => {
+        if (image.id !== imageId) return image;
+        else return { ...image, value: value };
+      })
+    );
+    const preNotes = [...notes];
+    const getNote = preNotes.find((preNote) => preNote.id === noteId);
+    getNote.style.image = value;
+    setNotes(preNotes);
+  }
+
+  function handleBackgroundImageChange(noteId, imageId, value) {
+    formSwitch === "addNoteForm"
+      ? addNoteBackgroundImageChange(value)
+      : readNoteBackgroundImageChange(noteId, imageId, value);
+  }
+
   //search
   function handleSearchNote(text) {
     setSearchText(text);
+  }
+
+  //restore default theme
+  function addNoteDefault() {
+    setDefaultStyle(defaultOption);
+  }
+  function readNoteDefault(noteId) {
+    const preNotes = [...notes];
+    const getNote = preNotes.find((preNote) => preNote.id === noteId);
+    getNote.style.color = defaultOption.color;
+    getNote.style.background = defaultOption.background;
+    getNote.style.fontSize = defaultOption.fontSize;
+    getNote.style.image = defaultOption.image;
+    setNotes(preNotes);
   }
   return (
     <div className="wrapper" ref={wrapperRef}>
@@ -296,21 +370,25 @@ export default function App() {
                 note={note}
                 handleDeleteNote={handleDeleteNote}
                 handleReadPageChange={handleReadPageChange}
+                readNoteDefault={readNoteDefault}
               />
             );
           })}
       </div>
+
       <div className="container" style={containerStyle()}>
         {formSwitch === "addNoteForm" ? (
           <Note
             handleAddPageChange={handleAddPageChange}
             handleSaveNote={handleSaveNote}
             defaultStyle={defaultStyle}
+            addNoteDefault={addNoteDefault}
           />
         ) : (
           <ReadNote
             handleUpdateChange={handleUpdateChange}
             selectedNote={selectedNote}
+            readNoteDefault={readNoteDefault}
           />
         )}
         <div className="options">
@@ -357,10 +435,21 @@ export default function App() {
               />
             </div>
           </div>
-          <BackgroundImageOption
-            handleShow={handleShow}
-            optionRef4={optionRef4}
-          />
+          <div className="option" ref={optionRef4}>
+            <div className="image" onClick={handleShow}></div>
+            <div className="items">
+              {backgroundImage.map((image, index) => (
+                <BackgroundImageOption
+                  key={index}
+                  backgroundImage={image}
+                  selectedNote={selectedNote}
+                  defaultStyle={defaultStyle}
+                  handleBackgroundImageChange={handleBackgroundImageChange}
+                  formSwitch={formSwitch}
+                />
+              ))}
+            </div>
+          </div>
         </div>
         <span className="cross" ref={crossRef} onClick={handleRemove}>
           &times;
