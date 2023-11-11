@@ -11,6 +11,14 @@ import FontSizeOption from "./components/FontSizeOption";
 import BackgroundImageOption from "./components/BackgroundImageOption";
 import "./App.css";
 
+//background image
+import back1 from "./covers/back1.jpg";
+import back2 from "./covers/back2.jpg";
+import back3 from "./covers/back3.jpg";
+import back4 from "./covers/back4.jpg";
+import back5 from "./covers/back5.jpg";
+import back6 from "./covers/back6.jpg";
+
 export default function App() {
   const colorOption = [
     {
@@ -78,32 +86,32 @@ export default function App() {
     {
       id: "0",
       name: "photo1",
-      value: "back1.jgp",
+      value: "back1",
     },
     {
       id: "1",
       name: "photo2",
-      value: "back2.jgp",
+      value: "back2",
     },
     {
       id: "2",
       name: "photo3",
-      value: "back3.jgp",
+      value: "back3",
     },
     {
       id: "3",
       name: "photo4",
-      value: "back4.jgp",
+      value: "back4",
     },
     {
       id: "4",
       name: "photo5",
-      value: "back5.jgp",
+      value: "back5",
     },
     {
       id: "5",
       name: "photo6",
-      value: "back6.jgp",
+      value: "back6",
     },
   ];
 
@@ -200,7 +208,7 @@ export default function App() {
   }
 
   //add note
-  function handleSaveNote({ title, note, color, background, fontSize }) {
+  function handleSaveNote({ title, note, color, background, fontSize, image }) {
     const preNote = notes;
     const newNote = {
       id: nanoid(),
@@ -210,7 +218,7 @@ export default function App() {
         color,
         background,
         fontSize,
-        image: "none",
+        image,
       },
       date: date.toLocaleDateString(),
     };
@@ -220,21 +228,6 @@ export default function App() {
   function handleDeleteNote(id) {
     const preNote = notes;
     setNotes(preNote.filter((note) => note.id !== id));
-  }
-
-  //options
-  function containerStyle() {
-    return formSwitch === "readNoteForm"
-      ? {
-          backgroundColor: selectedNote && selectedNote.style.background,
-          color: selectedNote && selectedNote.style.color,
-          fontSize: selectedNote && selectedNote.style.fontSize + "px",
-        }
-      : {
-          backgroundColor: defaultStyle.background,
-          color: defaultStyle.color,
-          fontSize: defaultStyle.fontSize + "px",
-        };
   }
   //color change
   function addNoteColorChange(color) {
@@ -349,6 +342,91 @@ export default function App() {
     getNote.style.image = defaultOption.image;
     setNotes(preNotes);
   }
+
+  //styles
+  function containerStyle() {
+    return formSwitch === "readNoteForm"
+      ? {
+          backgroundColor: selectedNote && selectedNote.style.background,
+          color: selectedNote && selectedNote.style.color,
+          fontSize: selectedNote && selectedNote.style.fontSize + "px",
+        }
+      : {
+          backgroundColor: defaultStyle.background,
+          color: defaultStyle.color,
+          fontSize: defaultStyle.fontSize + "px",
+        };
+  }
+  function optionStyle() {
+    let readPath;
+    switch (selectedNote && selectedNote.style.image) {
+      case "back1":
+        readPath = back1;
+        break;
+      case "back2":
+        readPath = back2;
+        break;
+      case "back3":
+        readPath = back3;
+        break;
+      case "back4":
+        readPath = back4;
+        break;
+      case "back5":
+        readPath = back5;
+        break;
+      case "back6":
+        readPath = back6;
+        break;
+      default:
+        break;
+    }
+    let notePath;
+    switch (defaultStyle.image) {
+      case "back1":
+        notePath = back1;
+        break;
+      case "back2":
+        notePath = back2;
+        break;
+      case "back3":
+        notePath = back3;
+        break;
+      case "back4":
+        notePath = back4;
+        break;
+      case "back5":
+        notePath = back5;
+        break;
+      case "back6":
+        notePath = back6;
+        break;
+      default:
+        break;
+    }
+    return formSwitch === "readNoteForm"
+      ? {
+          backgroundImage: `url(${readPath})`,
+          backgroundAttachment: "fixed",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center center",
+          backgroundColor: selectedNote && selectedNote.style.background,
+          color: selectedNote && selectedNote.style.color,
+          fontSize: selectedNote && selectedNote.style.fontSize + "px",
+        }
+      : {
+          backgroundImage: `url(${notePath})`,
+          backgroundAttachment: "fixed",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center center",
+          backgroundColor: defaultStyle.background,
+          color: defaultStyle.color,
+          fontSize: defaultStyle.fontSize + "px",
+        };
+  }
+
   return (
     <div className="wrapper" ref={wrapperRef}>
       <div className="noteLists">
@@ -391,7 +469,7 @@ export default function App() {
             readNoteDefault={readNoteDefault}
           />
         )}
-        <div className="options">
+        <div className="options" style={optionStyle()}>
           <div className="option" ref={optionRef1}>
             <div className="color" onClick={handleShow}></div>
             <div className="items">
