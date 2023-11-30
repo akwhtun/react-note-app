@@ -45,7 +45,6 @@ export default function NoteList({
       backgroundRepeat: "no-repeat",
       backgroundColor: note.style.background,
       color: note.style.color,
-      // fontSize: note.style.fontSize + "px",
     };
   }
 

@@ -113,6 +113,11 @@ export default function App() {
       name: "photo6",
       value: "back6",
     },
+    {
+      id: "6",
+      name: "none",
+      value: "none",
+    },
   ];
 
   const defaultOption = {
@@ -515,7 +520,7 @@ export default function App() {
           </div>
           <div className="option" ref={optionRef4}>
             <div className="image" onClick={handleShow}></div>
-            <div className="items">
+            <div className="items images">
               {backgroundImage.map((image, index) => (
                 <BackgroundImageOption
                   key={index}
