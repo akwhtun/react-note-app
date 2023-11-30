@@ -16,7 +16,7 @@ This React Note App is a simple powerful tool for creating, managing, and custom
 
 ## Installation
 
-1. Clone the repository: `git clone https://github.com/akwhtun/Note-App.git`
+1. Clone the repository: `git clone https://github.com/akwhtun/react-note-app.git`
 2. Install dependencies: `npm install`
 
 ## Usage
