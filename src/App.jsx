@@ -446,7 +446,7 @@ export default function App() {
       <div className="noteLists">
         {notes
           .filter((noteText) =>
-            noteText.note.toLowerCase().includes(searchText)
+            noteText.note.toLowerCase().includes(searchText.toLowerCase())
           )
           .map((note) => {
             return (
