@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useRef, useEffect, useMemo } from "react";
 import { nanoid } from "nanoid";
+import NoNote from "./components/NoNote";
 import Search from "./components/Search";
 import NoteList from "./components/NoteList";
 import Note from "./components/Note";
@@ -434,14 +435,15 @@ export default function App() {
 
   return (
     <div className="wrapper" ref={wrapperRef}>
-      <div className="noteLists">
+      {Object.keys(notes).length === 0 ? (
+        <NoNote />
+      ) : (
         <Search handleSearchNote={handleSearchNote} />
-        <div
-          className="plus"
-          onClick={() => handleAddPageChange("addNoteForm")}
-        >
-          &#43;
-        </div>
+      )}
+      <div className="plus" onClick={() => handleAddPageChange("addNoteForm")}>
+        &#43;
+      </div>
+      <div className="noteLists">
         {notes
           .filter((noteText) =>
             noteText.note.toLowerCase().includes(searchText)
