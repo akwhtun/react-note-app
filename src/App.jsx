@@ -132,7 +132,7 @@ export default function App() {
   const [formSwitch, setFormSwitch] = useState("addNoteForm");
   const [selectedNoteId, setSelectedNoteId] = useState();
   const selectedNote = useMemo(() => {
-    return notes.find((note) => note.id === selectedNoteId);
+    return (notes || []).find((note) => note.id === selectedNoteId);
   }, [selectedNoteId, notes]);
 
   const [color, setColor] = useState(colorOption);
@@ -154,15 +154,24 @@ export default function App() {
   const options = [optionRef1, optionRef2, optionRef3, optionRef4];
 
   const STORAGE_KEY = "REACT_NOTE_APP";
-
   useEffect(() => {
-    const jsonData = localStorage.getItem(STORAGE_KEY);
-    setNotes(JSON.parse(jsonData));
+    try {
+      const jsonData = localStorage.getItem(STORAGE_KEY);
+      const parsedNotes = JSON.parse(jsonData);
+      setNotes(Array.isArray(parsedNotes) ? parsedNotes : []);
+    } catch (error) {
+      console.error('Error parsing notes from localStorage:', error);
+      setNotes([]);
+    }
   }, []);
 
   useEffect(() => {
-    const jsonData = JSON.stringify(notes);
-    localStorage.setItem(STORAGE_KEY, jsonData);
+    try {
+      const jsonData = JSON.stringify(notes);
+      localStorage.setItem(STORAGE_KEY, jsonData);
+    } catch (error) {
+      console.error('Error saving notes to localStorage:', error);
+    }
   }, [notes]);
 
   const date = new Date();
@@ -353,15 +362,15 @@ export default function App() {
   function containerStyle() {
     return formSwitch === "readNoteForm"
       ? {
-          backgroundColor: selectedNote && selectedNote.style.background,
-          color: selectedNote && selectedNote.style.color,
-          fontSize: selectedNote && selectedNote.style.fontSize + "px",
-        }
+        backgroundColor: selectedNote && selectedNote.style.background,
+        color: selectedNote && selectedNote.style.color,
+        fontSize: selectedNote && selectedNote.style.fontSize + "px",
+      }
       : {
-          backgroundColor: defaultStyle.background,
-          color: defaultStyle.color,
-          fontSize: defaultStyle.fontSize + "px",
-        };
+        backgroundColor: defaultStyle.background,
+        color: defaultStyle.color,
+        fontSize: defaultStyle.fontSize + "px",
+      };
   }
   function optionStyle() {
     let readPath;
@@ -412,30 +421,32 @@ export default function App() {
     }
     return formSwitch === "readNoteForm"
       ? {
-          backgroundImage: `url(${readPath})`,
-          backgroundAttachment: "fixed",
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center center",
-          backgroundColor: selectedNote && selectedNote.style.background,
-          color: selectedNote && selectedNote.style.color,
-          fontSize: selectedNote && selectedNote.style.fontSize + "px",
-        }
+        backgroundImage: `url(${readPath})`,
+        backgroundAttachment: "fixed",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center center",
+        backgroundColor: selectedNote && selectedNote.style.background,
+        color: selectedNote && selectedNote.style.color,
+        fontSize: selectedNote && selectedNote.style.fontSize + "px",
+      }
       : {
-          backgroundImage: `url(${notePath})`,
-          backgroundAttachment: "fixed",
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center center",
-          backgroundColor: defaultStyle.background,
-          color: defaultStyle.color,
-          fontSize: defaultStyle.fontSize + "px",
-        };
+        backgroundImage: `url(${notePath})`,
+        backgroundAttachment: "fixed",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center center",
+        backgroundColor: defaultStyle.background,
+        color: defaultStyle.color,
+        fontSize: defaultStyle.fontSize + "px",
+      };
   }
 
   return (
     <div className="wrapper" ref={wrapperRef}>
-      {Object.keys(notes).length === 0 ? (
+
+
+      {notes && Object.keys(notes).length === 0 ? (
         <NoNote />
       ) : (
         <Search handleSearchNote={handleSearchNote} />
@@ -444,22 +455,19 @@ export default function App() {
         &#43;
       </div>
       <div className="noteLists">
-        {notes
-          .filter((noteText) =>
-            noteText.note.toLowerCase().includes(searchText.toLowerCase())
-          )
-          .map((note) => {
-            return (
-              <NoteList
-                key={note.id}
-                note={note}
-                handleDeleteNote={handleDeleteNote}
-                handleReadPageChange={handleReadPageChange}
-                readNoteDefault={readNoteDefault}
-              />
-            );
-          })}
+        {(notes || []).filter((noteText) =>
+          noteText.note.toLowerCase().includes(searchText.toLowerCase())
+        ).map((note) => (
+          <NoteList
+            key={note.id}
+            note={note}
+            handleDeleteNote={handleDeleteNote}
+            handleReadPageChange={handleReadPageChange}
+            readNoteDefault={readNoteDefault}
+          />
+        ))}
       </div>
+
 
       <div className="container" style={containerStyle()}>
         {formSwitch === "addNoteForm" ? (
